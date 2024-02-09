@@ -284,16 +284,18 @@ class Table(Selectable[T]):
             log.debug("removing %s from cache", pop_me)
             self._cache.pop(pop_me, None)  # Don't raise if not in cache
 
-    def select(self, _where={}, _order_by=None, **kws) -> Generator[T, None, None]:
+    def select(self, _where=None, _order_by=None, **kws) -> Generator[T, None, None]:
         """Read objects of specified class.
 
         Specify _order_by="field" or ["field1 desc", "field2"] to sort the results.
         """
+        _where = {} if _where is None else _where
         kws.update(_where)
         yield from self.__select(kws, _order_by=_order_by)
 
-    def count(self, _where={}, **kws) -> int:
+    def count(self, _where=None, **kws) -> int:
         """Return count of objs matching where clause."""
+        _where = {} if _where is None else _where
         kws.update(_where)
         return self.db.count(self.table_name, kws)
 
@@ -376,8 +378,9 @@ class ObjCache(Selectable[T]):
         """Pass though to table on everything but select."""
         return getattr(self.table, item)
 
-    def select(self, _where={}, **kws) -> Generator[T, None, None]:
+    def select(self, _where=None, **kws) -> Generator[T, None, None]:
         """Read objects from the cache."""
+        _where = {} if _where is None else _where
         kws.update(_where)
         for v in self.table._cache.values():
             if v._matches(kws):

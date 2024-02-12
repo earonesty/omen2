@@ -47,8 +47,7 @@ class Selectable(Generic[T]):
             assert len(self.row_type._pk) == 1
             # noinspection PyProtectedMember
             kws[self.row_type._pk[0]] = _id
-        ret = self.select_one(**kws)
-        if ret is None:
+        if (ret := self.select_one(**kws)) is None:
             raise OmenKeyError("%s not in %s" % (kws, self.__class__.__name__))
         return ret
 

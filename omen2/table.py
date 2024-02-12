@@ -221,8 +221,7 @@ class Table(Selectable[T]):
             obj.__dict__[id_field] = ret.lastrowid
 
         pk = obj._to_pk_tuple()
-        alr = self._cache.get(pk)
-        if alr:
+        if alr := self._cache.get(pk):
             alr._update_from_object(obj)
             return
         self._add_cache(obj)

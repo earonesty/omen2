@@ -155,8 +155,7 @@ class Omen(abc.ABC):
 
         row_type will be set to Car
         """
-        bases = getattr(tab, "__orig_bases__", None)
-        if bases:
+        if bases := getattr(tab, "__orig_bases__", None):
             args = getattr(bases[0], "__args__")
             if args and issubclass(args[0], ObjBase):
                 tab.row_type = args[0]

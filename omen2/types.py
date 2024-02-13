@@ -20,8 +20,7 @@ any_type.__name__ = "Any"
 
 def bool_type(arg):
     """Convert sql string to bool, this function must have the __name__ 'bool'"""
-    arg = arg.lower()
-    if arg == "true":
+    if (arg := arg.lower()) == "true":
         return True
     elif arg == "false":
         return False

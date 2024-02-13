@@ -52,13 +52,15 @@ class Selectable(Generic[T]):
             raise OmenKeyError("%s not in %s" % (kws, self.__class__.__name__))
         return ret
 
-    def select_one(self, _where={}, **kws) -> Optional[T]:
+    def select_one(self, _where=None, **kws) -> Optional[T]:
         """Return one row, None, or raises an OmenMoreThanOneError."""
+        _where = {} if _where is None else _where
         itr = self.select(_where, **kws)
         return self._return_one(itr)
 
-    def select_any_one(self, _where={}, **kws) -> Optional[T]:
+    def select_any_one(self, _where=None, **kws) -> Optional[T]:
         """Return one row or None, doesn't raise an error if there is more than one."""
+        _where = {} if _where is None else _where
         itr = self.select(_where, **kws)
         return self._return_any_one(itr)
 
@@ -80,12 +82,14 @@ class Selectable(Generic[T]):
         except StopIteration:
             return one
 
-    def select(self, _where={}, **kws) -> Generator[T, None, None]:
+    def select(self, _where=None, **kws) -> Generator[T, None, None]:
         """Read objects of specified class."""
+        _where = {} if _where is None else _where
         raise NotImplementedError
 
-    def count(self, _where={}, **kws) -> int:
+    def count(self, _where=None, **kws) -> int:
         """Return count of objs matchig where clause.  Override for efficiency."""
+        _where = {} if _where is None else _where
         return sum(1 for _ in self.select(_where, **kws))
 
     def __len__(self):

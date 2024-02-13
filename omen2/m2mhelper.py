@@ -212,11 +212,12 @@ class M2MHelper(Relation[ROW_TYPE]):
 
         return M2MMixObj(res, obj)
 
-    def select(self, _where={}, **kws) -> Generator[ROW_TYPE, None, None]:
+    def select(self, _where=None, **kws) -> Generator[ROW_TYPE, None, None]:
         """Select a member of the m2m list.
 
         Returns mixin objects that represents the relation.
         """
+        _where = {} if _where is None else _where
         kws2 = {}
         for k in kws.copy():
             if k not in self.table_type.field_names:
